@@ -1,0 +1,287 @@
+{
+ "monolitico_E1_caida_nodo": {
+  "inj": 5.47,
+  "rb_start": 20.56,
+  "rb_end": 20.77,
+  "status": "completed",
+  "deviated": true,
+  "ssh_before": [
+   200,
+   1.0
+  ],
+  "ssh_after": [
+   200,
+   0.0
+  ],
+  "durante_probe": [
+   0.0
+  ],
+  "pre": {
+   "n": 208,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 6,
+   "p95": 8,
+   "deg": 0,
+   "rps": 38.4
+  },
+  "dur": {
+   "n": 576,
+   "disp": 0.0,
+   "disp_saldo": 0.0,
+   "disp_transf": 0.0,
+   "p50": 5,
+   "p95": 7,
+   "deg": 0,
+   "rps": 38.3
+  },
+  "post": {
+   "n": 912,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 5,
+   "p95": 9,
+   "deg": 0,
+   "rps": 37.8
+  },
+  "recuperacion_s": 0.19
+ },
+ "monolitico_E2_latencia": {
+  "inj": 5.34,
+  "rb_start": 140.54,
+  "rb_end": 140.54,
+  "status": "completed",
+  "deviated": true,
+  "ssh_before": [
+   200,
+   1.0
+  ],
+  "ssh_after": [
+   200,
+   0.0
+  ],
+  "durante_probe": [
+   0.0
+  ],
+  "pre": {
+   "n": 204,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 6,
+   "p95": 10,
+   "deg": 0,
+   "rps": 38.2
+  },
+  "dur": {
+   "n": 50,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 3006,
+   "p95": 3007,
+   "deg": 0,
+   "rps": 1.3
+  },
+  "post": {},
+  "recuperacion_s": null
+ },
+ "monolitico_E3_caida_total": {
+  "inj": 5.34,
+  "rb_start": 20.44,
+  "rb_end": 20.86,
+  "status": "completed",
+  "deviated": true,
+  "ssh_before": [
+   200,
+   1.0
+  ],
+  "ssh_after": [
+   200,
+   0.0
+  ],
+  "durante_probe": [
+   0.0
+  ],
+  "pre": {
+   "n": 204,
+   "disp": 99.0,
+   "disp_saldo": 99.1,
+   "disp_transf": 98.9,
+   "p50": 6,
+   "p95": 11,
+   "deg": 0,
+   "rps": 38.2
+  },
+  "dur": {
+   "n": 576,
+   "disp": 0.0,
+   "disp_saldo": 0.0,
+   "disp_transf": 0.0,
+   "p50": 4,
+   "p95": 6,
+   "deg": 0,
+   "rps": 38.5
+  },
+  "post": {
+   "n": 908,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 6,
+   "p95": 8,
+   "deg": 0,
+   "rps": 37.7
+  },
+  "recuperacion_s": 0.15
+ },
+ "resiliente_E1_caida_nodo": {
+  "inj": 5.36,
+  "rb_start": 20.51,
+  "rb_end": 20.72,
+  "status": "completed",
+  "deviated": false,
+  "ssh_before": [
+   200,
+   1.0
+  ],
+  "ssh_after": [
+   200,
+   1.0
+  ],
+  "durante_probe": [
+   1.0
+  ],
+  "pre": {
+   "n": 204,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 5,
+   "p95": 8,
+   "deg": 0,
+   "rps": 38.3
+  },
+  "dur": {
+   "n": 573,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 5,
+   "p95": 8,
+   "deg": 0,
+   "rps": 37.8
+  },
+  "post": {
+   "n": 920,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 5,
+   "p95": 8,
+   "deg": 0,
+   "rps": 37.9
+  },
+  "recuperacion_s": 0.03
+ },
+ "resiliente_E2_latencia": {
+  "inj": 5.33,
+  "rb_start": 20.49,
+  "rb_end": 20.49,
+  "status": "completed",
+  "deviated": false,
+  "ssh_before": [
+   200,
+   1.0
+  ],
+  "ssh_after": [
+   200,
+   1.0
+  ],
+  "durante_probe": [
+   1.0
+  ],
+  "pre": {
+   "n": 202,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 6,
+   "p95": 9,
+   "deg": 0,
+   "rps": 38.1
+  },
+  "dur": {
+   "n": 459,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 6,
+   "p95": 506,
+   "deg": 0,
+   "rps": 30.3
+  },
+  "post": {
+   "n": 924,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 5,
+   "p95": 9,
+   "deg": 0,
+   "rps": 37.8
+  },
+  "recuperacion_s": 0.04
+ },
+ "resiliente_E3_caida_total": {
+  "inj": 5.28,
+  "rb_start": 20.36,
+  "rb_end": 20.77,
+  "status": "completed",
+  "deviated": true,
+  "ssh_before": [
+   200,
+   1.0
+  ],
+  "ssh_after": [
+   200,
+   0.5
+  ],
+  "durante_probe": [
+   0.5
+  ],
+  "pre": {
+   "n": 200,
+   "disp": 100.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 100.0,
+   "p50": 5,
+   "p95": 10,
+   "deg": 0,
+   "rps": 38.3
+  },
+  "dur": {
+   "n": 582,
+   "disp": 61.3,
+   "disp_saldo": 100.0,
+   "disp_transf": 0.0,
+   "p50": 3,
+   "p95": 5,
+   "deg": 357,
+   "rps": 38.8
+  },
+  "post": {
+   "n": 915,
+   "disp": 98.0,
+   "disp_saldo": 100.0,
+   "disp_transf": 95.3,
+   "p50": 6,
+   "p95": 9,
+   "deg": 22,
+   "rps": 37.8
+  },
+  "recuperacion_s": 1.47
+ }
+}
