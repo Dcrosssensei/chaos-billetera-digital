@@ -1,0 +1,114 @@
+{
+  "title": "E3 - Caída de ambos nodos core (evaluación de degradación gradual)",
+  "description": "Peor caso: todo el backend transaccional cae. Se espera que al menos la consulta de saldo siga disponible.",
+  "tags": [
+    "recuperabilidad",
+    "degradacion"
+  ],
+  "steady-state-hypothesis": {
+    "title": "Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "gateway-responde",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "url": "http://127.0.0.1:8000/health",
+          "timeout": 3
+        }
+      },
+      {
+        "type": "probe",
+        "name": "tasa-de-exito-usuario",
+        "tolerance": {
+          "type": "range",
+          "range": [
+            0.95,
+            1.0
+          ]
+        },
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "action",
+      "name": "matar-core-9001",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "kill_node",
+        "arguments": {
+          "port": 9001
+        }
+      }
+    },
+    {
+      "type": "action",
+      "name": "matar-core-9002",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "kill_node",
+        "arguments": {
+          "port": 9002
+        }
+      },
+      "pauses": {
+        "after": 15
+      }
+    },
+    {
+      "type": "probe",
+      "name": "observar-tasa-durante-fallo",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "success_ratio",
+        "arguments": {
+          "samples": 20,
+          "max_ms": 1000
+        }
+      }
+    }
+  ],
+  "rollbacks": [
+    {
+      "type": "action",
+      "name": "reiniciar-core-9001",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "start_node",
+        "arguments": {
+          "port": 9001
+        }
+      }
+    },
+    {
+      "type": "action",
+      "name": "reiniciar-core-9002",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "start_node",
+        "arguments": {
+          "port": 9002
+        }
+      },
+      "pauses": {
+        "after": 2
+      }
+    }
+  ]
+}
