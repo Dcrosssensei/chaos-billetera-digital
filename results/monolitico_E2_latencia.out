@@ -1,0 +1,23 @@
+[32m[2026-09-23 22:51:07 INFO] Validating the experiment's syntax
+[32m[2026-09-23 22:51:07 INFO] Experiment looks valid
+[32m[2026-09-23 22:51:07 INFO] Running experiment: E2 - Degradación de comunicación: latencia de 3 s en el servidor core principal
+[32m[2026-09-23 22:51:07 INFO] Steady-state strategy: default
+[32m[2026-09-23 22:51:07 INFO] Rollbacks strategy: default
+[32m[2026-09-23 22:51:07 INFO] Steady state hypothesis: Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)
+[32m[2026-09-23 22:51:07 INFO] Probe: gateway-responde
+[32m[2026-09-23 22:51:07 INFO] Probe: tasa-de-exito-usuario
+[32m[2026-09-23 22:51:07 INFO] Steady state hypothesis is met!
+[32m[2026-09-23 22:51:07 INFO] Playing your experiment's method now...
+[32m[2026-09-23 22:51:07 INFO] Action: inyectar-latencia-3000ms
+[32m[2026-09-23 22:51:07 INFO] Pausing after activity for 15s...
+[32m[2026-09-23 22:51:22 INFO] Probe: observar-tasa-durante-fallo
+[32m[2026-09-23 22:52:22 INFO] Steady state hypothesis: Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)
+[32m[2026-09-23 22:52:22 INFO] Probe: gateway-responde
+[32m[2026-09-23 22:52:22 INFO] Probe: tasa-de-exito-usuario
+[31m[2026-09-23 22:53:22 CRITICAL] Steady state probe 'tasa-de-exito-usuario' is not in the given tolerance so failing this experiment
+[32m[2026-09-23 22:53:22 INFO] Let's rollback...
+[32m[2026-09-23 22:53:22 INFO] Rollback: retirar-latencia
+[32m[2026-09-23 22:53:22 INFO] Action: retirar-latencia
+[32m[2026-09-23 22:53:22 INFO] Pausing after activity for 2s...
+[32m[2026-09-23 22:53:24 INFO] Experiment ended with status: deviated
+[32m[2026-09-23 22:53:24 INFO] The steady-state has deviated, a weakness may have been discovered

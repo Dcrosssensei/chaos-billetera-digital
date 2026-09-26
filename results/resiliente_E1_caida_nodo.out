@@ -1,0 +1,22 @@
+[32m[2026-09-23 22:53:34 INFO] Validating the experiment's syntax
+[32m[2026-09-23 22:53:34 INFO] Experiment looks valid
+[32m[2026-09-23 22:53:34 INFO] Running experiment: E1 - Caída abrupta del servidor core principal
+[32m[2026-09-23 22:53:34 INFO] Steady-state strategy: default
+[32m[2026-09-23 22:53:34 INFO] Rollbacks strategy: default
+[32m[2026-09-23 22:53:34 INFO] Steady state hypothesis: Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)
+[32m[2026-09-23 22:53:34 INFO] Probe: gateway-responde
+[32m[2026-09-23 22:53:34 INFO] Probe: tasa-de-exito-usuario
+[32m[2026-09-23 22:53:34 INFO] Steady state hypothesis is met!
+[32m[2026-09-23 22:53:34 INFO] Playing your experiment's method now...
+[32m[2026-09-23 22:53:34 INFO] Action: matar-servidor-core-9001
+[32m[2026-09-23 22:53:34 INFO] Pausing after activity for 15s...
+[32m[2026-09-23 22:53:49 INFO] Probe: observar-tasa-durante-fallo
+[32m[2026-09-23 22:53:49 INFO] Steady state hypothesis: Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)
+[32m[2026-09-23 22:53:49 INFO] Probe: gateway-responde
+[32m[2026-09-23 22:53:49 INFO] Probe: tasa-de-exito-usuario
+[32m[2026-09-23 22:53:49 INFO] Steady state hypothesis is met!
+[32m[2026-09-23 22:53:49 INFO] Let's rollback...
+[32m[2026-09-23 22:53:49 INFO] Rollback: reiniciar-servidor-core-9001
+[32m[2026-09-23 22:53:49 INFO] Action: reiniciar-servidor-core-9001
+[32m[2026-09-23 22:53:49 INFO] Pausing after activity for 2s...
+[32m[2026-09-23 22:53:51 INFO] Experiment ended with status: completed

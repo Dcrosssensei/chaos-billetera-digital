@@ -1,0 +1,305 @@
+{
+  "chaoslib-version": "1.44.0",
+  "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+  "node": "vm",
+  "experiment": {
+    "title": "E1 - Caída abrupta del servidor core principal",
+    "description": "Reproduce el evento del 24/10/2025: un servidor del centro de datos deja de responder.",
+    "tags": [
+      "disponibilidad",
+      "tolerancia-a-fallos"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)",
+      "probes": [
+        {
+          "type": "probe",
+          "name": "gateway-responde",
+          "tolerance": 200,
+          "provider": {
+            "type": "http",
+            "url": "http://127.0.0.1:8000/health",
+            "timeout": 3
+          }
+        },
+        {
+          "type": "probe",
+          "name": "tasa-de-exito-usuario",
+          "tolerance": {
+            "type": "range",
+            "range": [
+              0.95,
+              1.0
+            ]
+          },
+          "provider": {
+            "type": "python",
+            "module": "chaoslab",
+            "func": "success_ratio",
+            "arguments": {
+              "samples": 20,
+              "max_ms": 1000
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "matar-servidor-core-9001",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "kill_node",
+          "arguments": {
+            "port": 9001
+          }
+        },
+        "pauses": {
+          "after": 15
+        }
+      },
+      {
+        "type": "probe",
+        "name": "observar-tasa-durante-fallo",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      }
+    ],
+    "rollbacks": [
+      {
+        "type": "action",
+        "name": "reiniciar-servidor-core-9001",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "start_node",
+          "arguments": {
+            "port": 9001
+          }
+        },
+        "pauses": {
+          "after": 2
+        }
+      }
+    ],
+    "dry": null
+  },
+  "start": "2026-09-24T03:50:18.049889+00:00",
+  "status": "completed",
+  "deviated": true,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "gateway-responde",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "url": "http://127.0.0.1:8000/health",
+              "timeout": 3
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Server": "Werkzeug/3.1.8 Python/3.11.15",
+              "Date": "Thu, 24 Sep 2026 03:50:18 GMT",
+              "Content-Type": "application/json",
+              "Content-Length": "36",
+              "Connection": "close"
+            },
+            "body": {
+              "mode": "monolitico",
+              "status": "ok"
+            }
+          },
+          "start": "2026-09-24T03:50:18.050510+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:50:18.054319+00:00",
+          "duration": 0.003809,
+          "tolerance_met": true
+        },
+        {
+          "activity": {
+            "type": "probe",
+            "name": "tasa-de-exito-usuario",
+            "tolerance": {
+              "type": "range",
+              "range": [
+                0.95,
+                1.0
+              ]
+            },
+            "provider": {
+              "type": "python",
+              "module": "chaoslab",
+              "func": "success_ratio",
+              "arguments": {
+                "samples": 20,
+                "max_ms": 1000
+              }
+            }
+          },
+          "output": 1.0,
+          "start": "2026-09-24T03:50:18.054576+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:50:18.147549+00:00",
+          "duration": 0.092973,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": false,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "gateway-responde",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "url": "http://127.0.0.1:8000/health",
+              "timeout": 3
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Server": "Werkzeug/3.1.8 Python/3.11.15",
+              "Date": "Thu, 24 Sep 2026 03:50:33 GMT",
+              "Content-Type": "application/json",
+              "Content-Length": "36",
+              "Connection": "close"
+            },
+            "body": {
+              "mode": "monolitico",
+              "status": "ok"
+            }
+          },
+          "start": "2026-09-24T03:50:33.191550+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:50:33.192966+00:00",
+          "duration": 0.001416,
+          "tolerance_met": true
+        },
+        {
+          "activity": {
+            "type": "probe",
+            "name": "tasa-de-exito-usuario",
+            "tolerance": {
+              "type": "range",
+              "range": [
+                0.95,
+                1.0
+              ]
+            },
+            "provider": {
+              "type": "python",
+              "module": "chaoslab",
+              "func": "success_ratio",
+              "arguments": {
+                "samples": 20,
+                "max_ms": 1000
+              }
+            }
+          },
+          "output": 0.0,
+          "start": "2026-09-24T03:50:33.193115+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:50:33.238491+00:00",
+          "duration": 0.045376,
+          "tolerance_met": false
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "matar-servidor-core-9001",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "kill_node",
+          "arguments": {
+            "port": 9001
+          }
+        },
+        "pauses": {
+          "after": 15
+        }
+      },
+      "output": {
+        "killed": 9001,
+        "pid": 395
+      },
+      "start": "2026-09-24T03:50:18.148029+00:00",
+      "status": "succeeded",
+      "end": "2026-09-24T03:50:18.148326+00:00",
+      "duration": 0.000297
+    },
+    {
+      "activity": {
+        "type": "probe",
+        "name": "observar-tasa-durante-fallo",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      },
+      "output": 0.0,
+      "start": "2026-09-24T03:50:33.148802+00:00",
+      "status": "succeeded",
+      "end": "2026-09-24T03:50:33.191296+00:00",
+      "duration": 0.042494
+    }
+  ],
+  "rollbacks": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "reiniciar-servidor-core-9001",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "start_node",
+          "arguments": {
+            "port": 9001
+          }
+        },
+        "pauses": {
+          "after": 2
+        }
+      },
+      "output": {
+        "started": 9001
+      },
+      "start": "2026-09-24T03:50:33.238878+00:00",
+      "status": "succeeded",
+      "end": "2026-09-24T03:50:33.444039+00:00",
+      "duration": 0.205161
+    }
+  ],
+  "end": "2026-09-24T03:50:35.444390+00:00",
+  "duration": 17.396489143371582
+}

@@ -1,0 +1,308 @@
+{
+  "chaoslib-version": "1.44.0",
+  "platform": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+  "node": "vm",
+  "experiment": {
+    "title": "E2 - Degradación de comunicación: latencia de 3 s en el servidor core principal",
+    "description": "Simula el 'problema de comunicación' reportado: el servidor sigue vivo pero responde muy lento.",
+    "tags": [
+      "disponibilidad",
+      "eficiencia"
+    ],
+    "steady-state-hypothesis": {
+      "title": "Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)",
+      "probes": [
+        {
+          "type": "probe",
+          "name": "gateway-responde",
+          "tolerance": 200,
+          "provider": {
+            "type": "http",
+            "url": "http://127.0.0.1:8000/health",
+            "timeout": 3
+          }
+        },
+        {
+          "type": "probe",
+          "name": "tasa-de-exito-usuario",
+          "tolerance": {
+            "type": "range",
+            "range": [
+              0.95,
+              1.0
+            ]
+          },
+          "provider": {
+            "type": "python",
+            "module": "chaoslab",
+            "func": "success_ratio",
+            "arguments": {
+              "samples": 20,
+              "max_ms": 1000
+            }
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "inyectar-latencia-3000ms",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "inject_latency",
+          "arguments": {
+            "port": 9001,
+            "ms": 3000
+          }
+        },
+        "pauses": {
+          "after": 15
+        }
+      },
+      {
+        "type": "probe",
+        "name": "observar-tasa-durante-fallo",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      }
+    ],
+    "rollbacks": [
+      {
+        "type": "action",
+        "name": "retirar-latencia",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "inject_latency",
+          "arguments": {
+            "port": 9001,
+            "ms": 0
+          }
+        },
+        "pauses": {
+          "after": 2
+        }
+      }
+    ],
+    "dry": null
+  },
+  "start": "2026-09-24T03:51:07.302925+00:00",
+  "status": "completed",
+  "deviated": true,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "gateway-responde",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "url": "http://127.0.0.1:8000/health",
+              "timeout": 3
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Server": "Werkzeug/3.1.8 Python/3.11.15",
+              "Date": "Thu, 24 Sep 2026 03:51:07 GMT",
+              "Content-Type": "application/json",
+              "Content-Length": "36",
+              "Connection": "close"
+            },
+            "body": {
+              "mode": "monolitico",
+              "status": "ok"
+            }
+          },
+          "start": "2026-09-24T03:51:07.303364+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:51:07.305981+00:00",
+          "duration": 0.002617,
+          "tolerance_met": true
+        },
+        {
+          "activity": {
+            "type": "probe",
+            "name": "tasa-de-exito-usuario",
+            "tolerance": {
+              "type": "range",
+              "range": [
+                0.95,
+                1.0
+              ]
+            },
+            "provider": {
+              "type": "python",
+              "module": "chaoslab",
+              "func": "success_ratio",
+              "arguments": {
+                "samples": 20,
+                "max_ms": 1000
+              }
+            }
+          },
+          "output": 1.0,
+          "start": "2026-09-24T03:51:07.306153+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:51:07.385209+00:00",
+          "duration": 0.079056,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": false,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "gateway-responde",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "url": "http://127.0.0.1:8000/health",
+              "timeout": 3
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "Server": "Werkzeug/3.1.8 Python/3.11.15",
+              "Date": "Thu, 24 Sep 2026 03:52:22 GMT",
+              "Content-Type": "application/json",
+              "Content-Length": "36",
+              "Connection": "close"
+            },
+            "body": {
+              "mode": "monolitico",
+              "status": "ok"
+            }
+          },
+          "start": "2026-09-24T03:52:22.486043+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:52:22.488051+00:00",
+          "duration": 0.002008,
+          "tolerance_met": true
+        },
+        {
+          "activity": {
+            "type": "probe",
+            "name": "tasa-de-exito-usuario",
+            "tolerance": {
+              "type": "range",
+              "range": [
+                0.95,
+                1.0
+              ]
+            },
+            "provider": {
+              "type": "python",
+              "module": "chaoslab",
+              "func": "success_ratio",
+              "arguments": {
+                "samples": 20,
+                "max_ms": 1000
+              }
+            }
+          },
+          "output": 0.0,
+          "start": "2026-09-24T03:52:22.488209+00:00",
+          "status": "succeeded",
+          "end": "2026-09-24T03:53:22.584891+00:00",
+          "duration": 60.096682,
+          "tolerance_met": false
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "inyectar-latencia-3000ms",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "inject_latency",
+          "arguments": {
+            "port": 9001,
+            "ms": 3000
+          }
+        },
+        "pauses": {
+          "after": 15
+        }
+      },
+      "output": {
+        "latency_ms": 3000
+      },
+      "start": "2026-09-24T03:51:07.385728+00:00",
+      "status": "succeeded",
+      "end": "2026-09-24T03:51:07.389027+00:00",
+      "duration": 0.003299
+    },
+    {
+      "activity": {
+        "type": "probe",
+        "name": "observar-tasa-durante-fallo",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      },
+      "output": 0.0,
+      "start": "2026-09-24T03:51:22.389765+00:00",
+      "status": "succeeded",
+      "end": "2026-09-24T03:52:22.485713+00:00",
+      "duration": 60.095948
+    }
+  ],
+  "rollbacks": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "retirar-latencia",
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "inject_latency",
+          "arguments": {
+            "port": 9001,
+            "ms": 0
+          }
+        },
+        "pauses": {
+          "after": 2
+        }
+      },
+      "output": {
+        "latency_ms": 0
+      },
+      "start": "2026-09-24T03:53:22.585480+00:00",
+      "status": "succeeded",
+      "end": "2026-09-24T03:53:22.587889+00:00",
+      "duration": 0.002409
+    }
+  ],
+  "end": "2026-09-24T03:53:24.588380+00:00",
+  "duration": 137.28739500045776
+}
