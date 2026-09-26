@@ -1,0 +1,90 @@
+{
+  "title": "E1 - Caída abrupta del servidor core principal",
+  "description": "Reproduce el evento del 24/10/2025: un servidor del centro de datos deja de responder.",
+  "tags": [
+    "disponibilidad",
+    "tolerancia-a-fallos"
+  ],
+  "steady-state-hypothesis": {
+    "title": "Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "gateway-responde",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "url": "http://127.0.0.1:8000/health",
+          "timeout": 3
+        }
+      },
+      {
+        "type": "probe",
+        "name": "tasa-de-exito-usuario",
+        "tolerance": {
+          "type": "range",
+          "range": [
+            0.95,
+            1.0
+          ]
+        },
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "action",
+      "name": "matar-servidor-core-9001",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "kill_node",
+        "arguments": {
+          "port": 9001
+        }
+      },
+      "pauses": {
+        "after": 15
+      }
+    },
+    {
+      "type": "probe",
+      "name": "observar-tasa-durante-fallo",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "success_ratio",
+        "arguments": {
+          "samples": 20,
+          "max_ms": 1000
+        }
+      }
+    }
+  ],
+  "rollbacks": [
+    {
+      "type": "action",
+      "name": "reiniciar-servidor-core-9001",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "start_node",
+        "arguments": {
+          "port": 9001
+        }
+      },
+      "pauses": {
+        "after": 2
+      }
+    }
+  ]
+}
