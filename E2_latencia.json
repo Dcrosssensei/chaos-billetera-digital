@@ -1,0 +1,92 @@
+{
+  "title": "E2 - Degradación de comunicación: latencia de 3 s en el servidor core principal",
+  "description": "Simula el 'problema de comunicación' reportado: el servidor sigue vivo pero responde muy lento.",
+  "tags": [
+    "disponibilidad",
+    "eficiencia"
+  ],
+  "steady-state-hypothesis": {
+    "title": "Los usuarios pueden consultar saldo y transferir (≥95 % de operaciones exitosas en < 1 s)",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "gateway-responde",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "url": "http://127.0.0.1:8000/health",
+          "timeout": 3
+        }
+      },
+      {
+        "type": "probe",
+        "name": "tasa-de-exito-usuario",
+        "tolerance": {
+          "type": "range",
+          "range": [
+            0.95,
+            1.0
+          ]
+        },
+        "provider": {
+          "type": "python",
+          "module": "chaoslab",
+          "func": "success_ratio",
+          "arguments": {
+            "samples": 20,
+            "max_ms": 1000
+          }
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "action",
+      "name": "inyectar-latencia-3000ms",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "inject_latency",
+        "arguments": {
+          "port": 9001,
+          "ms": 3000
+        }
+      },
+      "pauses": {
+        "after": 15
+      }
+    },
+    {
+      "type": "probe",
+      "name": "observar-tasa-durante-fallo",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "success_ratio",
+        "arguments": {
+          "samples": 20,
+          "max_ms": 1000
+        }
+      }
+    }
+  ],
+  "rollbacks": [
+    {
+      "type": "action",
+      "name": "retirar-latencia",
+      "provider": {
+        "type": "python",
+        "module": "chaoslab",
+        "func": "inject_latency",
+        "arguments": {
+          "port": 9001,
+          "ms": 0
+        }
+      },
+      "pauses": {
+        "after": 2
+      }
+    }
+  ]
+}
